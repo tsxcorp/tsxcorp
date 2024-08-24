@@ -94,7 +94,7 @@
                 const reader = new FileReader();
                 reader.onloadend = function () {
                     const base64data = reader.result.split(',')[1];
-                    // Hiển thị chuỗi Base64 trực tiếp trên trang HTML
+                    // Trả về nội dung Base64 dưới dạng plain text
                     document.body.innerText = base64data;
                 };
                 reader.readAsDataURL(pdfBlob);
