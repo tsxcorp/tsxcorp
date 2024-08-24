@@ -50,7 +50,25 @@
         function updateBadge(name, company, qrCodeUrl) {
             document.getElementById('name').textContent = `${name}`;
             document.getElementById('company').textContent = `${company}`;
-            document.getElementById('qrCode').src = qrCodeUrl;
+            loadImageToBase64(qrCodeUrl, function(base64Image) {
+                document.getElementById('qrCode').src = base64Image;
+                downloadPDF(); // Tải xuống PDF sau khi hình ảnh đã được tải
+            });
+        }
+
+        // Hàm để tải hình ảnh và chuyển đổi sang Base64
+        function loadImageToBase64(url, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                const reader = new FileReader();
+                reader.onloadend = function() {
+                    callback(reader.result); // Trả về hình ảnh dạng base64
+                };
+                reader.readAsDataURL(xhr.response);
+            };
+            xhr.open('GET', url);
+            xhr.responseType = 'blob';
+            xhr.send();
         }
 
         // Hàm để lấy query parameters từ URL
@@ -65,10 +83,6 @@
             };
         }
 
-        // Gọi hàm để lấy dữ liệu từ URL và cập nhật badge
-        const params = getQueryParams();
-        updateBadge(params.name, params.company, params.qrCodeUrl);
-
         // Hàm để tải về PDF
         function downloadPDF() {
             const element = document.getElementById('badge');
@@ -82,8 +96,9 @@
             html2pdf().from(element).set(options).save();
         }
 
-        // Gọi hàm downloadPDF khi trang đã tải
-        window.onload = downloadPDF;
+        // Gọi hàm để lấy dữ liệu từ URL và cập nhật badge
+        const params = getQueryParams();
+        updateBadge(params.name, params.company, params.qrCodeUrl);
     </script>
 </body>
 </html>
