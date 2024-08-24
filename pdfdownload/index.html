@@ -40,19 +40,20 @@
 </head>
 <body>
     <div class="badge" id="badge">
-        <div class="name" id="name"></div>
-        <div class="company" id="company"></div>
-        <img src="" alt="QR Code" class="qr-code" id="qrCode">
+        <div class="name" id="name">Tên Mặc Định</div>
+        <div class="company" id="company">Công ty Mặc Định</div>
+        <img src="qr_code_placeholder.png" alt="QR Code" class="qr-code" id="qrCode">
     </div>
 
     <script>
         // Hàm để truyền dữ liệu từ API vào HTML
         function updateBadge(name, company, qrCodeUrl) {
-            document.getElementById('name').textContent = `${name}`;
-            document.getElementById('company').textContent = `${company}`;
+            document.getElementById('name').textContent = name;
+            document.getElementById('company').textContent = company;
+
             loadImageToBase64(qrCodeUrl, function(base64Image) {
                 document.getElementById('qrCode').src = base64Image;
-                downloadPDF(); // Tải xuống PDF sau khi hình ảnh đã được tải
+                generatePDF(); // Tạo PDF sau khi QR code đã được cập nhật
             });
         }
 
@@ -71,20 +72,8 @@
             xhr.send();
         }
 
-        // Hàm để lấy query parameters từ URL
-        function getQueryParams() {
-            const params = new URLSearchParams(window.location.search);
-            const qrCodeData = params.get('qrCodeUrl') || 'Mặc Định';
-            const qrCodeUrl = `https://port.rx-vietnamshows.com/qr-code?data=${qrCodeData}&size=215`;
-            return {
-                name: params.get('name') || 'Tên Mặc Định',
-                company: params.get('company') || 'Công ty Mặc Định',
-                qrCodeUrl: qrCodeUrl
-            };
-        }
-
-        // Hàm để tải về PDF
-        function downloadPDF() {
+        // Hàm để tạo PDF từ HTML
+        function generatePDF() {
             const element = document.getElementById('badge');
             const options = {
                 margin: 0,
@@ -93,12 +82,16 @@
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
             };
-            html2pdf().from(element).set(options).save();
+            html2pdf().from(element).set(options).outputPdf('dataurlnewwindow');
         }
 
         // Gọi hàm để lấy dữ liệu từ URL và cập nhật badge
-        const params = getQueryParams();
-        updateBadge(params.name, params.company, params.qrCodeUrl);
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || 'Tên Mặc Định';
+        const company = params.get('company') || 'Công ty Mặc Định';
+        const qrCodeUrl = `https://port.rx-vietnamshows.com/qr-code?data=${params.get('qrCodeUrl') || 'Mặc Định'}&size=215`;
+
+        updateBadge(name, company, qrCodeUrl);
     </script>
 </body>
 </html>
