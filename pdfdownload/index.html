@@ -52,7 +52,7 @@
             document.getElementById('company').textContent = `${company}`;
             loadImageToBase64(qrCodeUrl, function(base64Image) {
                 document.getElementById('qrCode').src = base64Image;
-                downloadPDF(); // Tải xuống PDF sau khi hình ảnh đã được tải
+                generatePDF(); // Tạo PDF sau khi hình ảnh đã được tải
             });
         }
 
@@ -83,8 +83,8 @@
             };
         }
 
-        // Hàm để tải về PDF
-        function downloadPDF() {
+        // Hàm để tạo PDF và trả về nội dung dưới dạng Base64
+        function generatePDF() {
             const element = document.getElementById('badge');
             const options = {
                 margin: 0,
@@ -93,7 +93,16 @@
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
             };
-            html2pdf().from(element).set(options).save();
+            
+            html2pdf().from(element).set(options).outputPdf().then(function (pdfBlob) {
+                const reader = new FileReader();
+                reader.onloadend = function () {
+                    const base64data = reader.result;
+                    // Gửi base64data đến server hoặc lưu lại
+                    console.log(base64data); // Bạn có thể gửi nội dung này đến server qua fetch hoặc XMLHttpRequest
+                };
+                reader.readAsDataURL(pdfBlob);
+            });
         }
 
         // Gọi hàm để lấy dữ liệu từ URL và cập nhật badge
