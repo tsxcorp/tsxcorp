@@ -57,7 +57,7 @@
             return {
                 name: params.get('name') || 'Tên Mặc Định',
                 company: params.get('company') || 'Công ty Mặc Định',
-                qrCodeUrl: params.get('qrCodeUrl') || 'https://port.rx-vietnamshows.com/qr-code?data=U2FsdGVkX191gbaKoHLcELN%2BB1iXLzgPILouLhO5SGNVXY9ncgTwkEJXOI4w3PabGvwI%2Fhi93imbtQzEzRLKoMf2779J92Bi9Xv2rKYLWjUsa7TIFYveluoq1wOORrnHXSPY020MVQzq3jMfEJWCB1L5kiE%2BcOTXl%2BpSbjJO8hT7JkXItZXN3QiopR8VJu5d&size=215'
+                qrCodeUrl: params.get(`https://port.rx-vietnamshows.com/qr-code?data=${qrCodeUrl}&size=215`) || 'https://port.rx-vietnamshows.com/qr-code?data=default'
             };
         }
 
