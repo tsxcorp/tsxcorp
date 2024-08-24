@@ -35,6 +35,7 @@
             height: 150px;
         }
     </style>
+    <!-- Thêm thư viện html2pdf -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 </head>
 <body>
@@ -93,8 +94,8 @@
                 const reader = new FileReader();
                 reader.onloadend = function () {
                     const base64data = reader.result.split(',')[1];
-                    // Hiển thị kết quả dưới dạng JSON
-                    document.body.innerHTML = JSON.stringify({ base64: base64data });
+                    // Hiển thị chuỗi Base64 trực tiếp trên trang HTML
+                    document.body.innerText = base64data;
                 };
                 reader.readAsDataURL(pdfBlob);
             });
