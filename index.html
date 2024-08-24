@@ -48,23 +48,24 @@
         function updateBadge(name, company, qrCodeUrl) {
             document.getElementById('name').textContent = `${name}`;
             document.getElementById('company').textContent = `${company}`;
-            document.getElementById('qrCode').src = qrCode;
+            document.getElementById('qrCode').src = qrCodeUrl;
         }
-        var qrCode;
+
         // Hàm để lấy query parameters từ URL
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
-            qrCode = `https://port.rx-vietnamshows.com/qr-code?data=${qrCodeUrl}&size=215`;
+            const qrCodeData = params.get('qrCodeUrl') || 'Mặc Định';
+            const qrCodeUrl = `https://port.rx-vietnamshows.com/qr-code?data=${qrCodeData}&size=215`;
             return {
                 name: params.get('name') || 'Tên Mặc Định',
                 company: params.get('company') || 'Công ty Mặc Định',
-                qrCodeUrl: params.get('qrCodeUrl') || 'Mặc Định'
+                qrCodeUrl: qrCodeUrl
             };
         }
 
         // Gọi hàm để lấy dữ liệu từ URL và cập nhật badge
         const params = getQueryParams();
-        updateBadge(params.name, params.company, qrCode);
+        updateBadge(params.name, params.company, params.qrCodeUrl);
 
         // Hàm để in và đóng cửa sổ sau 3 giây
         function printAndClose() {
