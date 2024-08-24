@@ -7,7 +7,6 @@
         .badge {
             width: 148mm;  /* Kích thước chiều ngang của A5 */
             height: 210mm; /* Kích thước chiều dọc của A5 */
-            /* border: 1px solid #000;  Bỏ đường viền ngoài cùng */
             padding: 20px;
             box-sizing: border-box;
             font-family: Arial, sans-serif;
@@ -39,28 +38,32 @@
 </head>
 <body>
     <div class="badge">
-        <div class="name" id="name">Tên: </div>
-        <div class="company" id="company">Công ty: </div>
+        <div class="name" id="name"></div>
+        <div class="company" id="company"></div>
         <img src="" alt="QR Code" class="qr-code" id="qrCode">
     </div>
 
     <script>
         // Hàm để truyền dữ liệu từ API vào HTML
         function updateBadge(name, company, qrCodeUrl) {
-            document.getElementById('name').textContent = name;
-            document.getElementById('company').textContent = company;
+            document.getElementById('name').textContent = `${name}`;
+            document.getElementById('company').textContent = `${company}`;
             document.getElementById('qrCode').src = qrCodeUrl;
         }
 
-        // Giả lập dữ liệu nhận từ API
-        const apiData = {
-            name: "Nguyễn Văn A",
-            company: "Công ty TNHH ABC",
-            qrCodeUrl: "https://qrcg-free-editor.qr-code-generator.com/main/assets/images/websiteQRCode_noFrame.png" // Đường dẫn đến QR Code
-        };
+        // Hàm để lấy query parameters từ URL
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                name: params.get('name') || 'Tên Mặc Định',
+                company: params.get('company') || 'Công ty Mặc Định',
+                qrCodeUrl: params.get('qrCodeUrl') || 'https://port.rx-vietnamshows.com/qr-code?data=U2FsdGVkX191gbaKoHLcELN%2BB1iXLzgPILouLhO5SGNVXY9ncgTwkEJXOI4w3PabGvwI%2Fhi93imbtQzEzRLKoMf2779J92Bi9Xv2rKYLWjUsa7TIFYveluoq1wOORrnHXSPY020MVQzq3jMfEJWCB1L5kiE%2BcOTXl%2BpSbjJO8hT7JkXItZXN3QiopR8VJu5d&size=215'
+            };
+        }
 
-        // Gọi hàm updateBadge với dữ liệu từ API
-        updateBadge(apiData.name, apiData.company, apiData.qrCodeUrl);
+        // Gọi hàm để lấy dữ liệu từ URL và cập nhật badge
+        const params = getQueryParams();
+        updateBadge(params.name, params.company, params.qrCodeUrl);
 
         // Hàm để in và đóng cửa sổ sau 3 giây
         function printAndClose() {
