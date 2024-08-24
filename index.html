@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>In Badge A5</title>
+    <style>
+        .badge {
+            width: 148mm;  /* Kích thước chiều ngang của A5 */
+            height: 210mm; /* Kích thước chiều dọc của A5 */
+            /* border: 1px solid #000;  Bỏ đường viền ngoài cùng */
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .name {
+            font-size: 38px; /* Làm lớn Tên hơn */
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase; /* Viết hoa toàn bộ */
+        }
+
+        .company {
+            font-size: 16px; /* Làm nhỏ tên công ty hơn */
+            margin-bottom: 30px;
+            text-transform: uppercase; /* Viết hoa toàn bộ */
+        }
+
+        .qr-code {
+            width: 150px;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <div class="badge">
+        <div class="name" id="name">Tên: </div>
+        <div class="company" id="company">Công ty: </div>
+        <img src="" alt="QR Code" class="qr-code" id="qrCode">
+    </div>
+
+    <script>
+        // Hàm để truyền dữ liệu từ API vào HTML
+        function updateBadge(name, company, qrCodeUrl) {
+            document.getElementById('name').textContent = name;
+            document.getElementById('company').textContent = company;
+            document.getElementById('qrCode').src = qrCodeUrl;
+        }
+
+        // Giả lập dữ liệu nhận từ API
+        const apiData = {
+            name: "Nguyễn Văn A",
+            company: "Công ty TNHH ABC",
+            qrCodeUrl: "https://qrcg-free-editor.qr-code-generator.com/main/assets/images/websiteQRCode_noFrame.png" // Đường dẫn đến QR Code
+        };
+
+        // Gọi hàm updateBadge với dữ liệu từ API
+        updateBadge(apiData.name, apiData.company, apiData.qrCodeUrl);
+
+        // Hàm để in và đóng cửa sổ sau 3 giây
+        function printAndClose() {
+            window.print(); // Gọi lệnh in
+            setTimeout(function() {
+                window.close(); // Đóng cửa sổ sau 3 giây
+            }, 3000);
+        }
+
+        // Gọi hàm printAndClose khi trang đã tải
+        window.onload = printAndClose;
+    </script>
+</body>
+</html>
