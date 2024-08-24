@@ -94,8 +94,9 @@
                 const reader = new FileReader();
                 reader.onloadend = function () {
                     const base64data = reader.result.split(',')[1];
-                    // Trả về nội dung Base64 dưới dạng plain text
-                    document.body.innerText = base64data;
+                    // Xóa nội dung hiện tại và chỉ trả về chuỗi Base64
+                    document.body.innerHTML = ''; // Xóa hết nội dung trên trang
+                    document.body.innerText = base64data; // Chỉ hiển thị nội dung Base64
                 };
                 reader.readAsDataURL(pdfBlob);
             });
