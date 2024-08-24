@@ -40,10 +40,13 @@
 </head>
 <body>
     <div class="badge" id="badge">
-        <div class="name" id="name"></div>
-        <div class="company" id="company"></div>
+        <div class="name" id="name">Tên Mặc Định</div>
+        <div class="company" id="company">Công ty Mặc Định</div>
         <img src="" alt="QR Code" class="qr-code" id="qrCode">
     </div>
+
+    <!-- Khu vực để hiển thị nội dung Base64 -->
+    <div id="base64-output" style="display: none;"></div>
 
     <script>
         // Hàm để truyền dữ liệu từ API vào HTML
@@ -83,7 +86,7 @@
             };
         }
 
-        // Hàm để tạo PDF và trả về nội dung dưới dạng Base64
+        // Hàm để tạo PDF và hiển thị nội dung Base64
         function generatePDF() {
             const element = document.getElementById('badge');
             const options = {
@@ -93,13 +96,12 @@
                 html2canvas: { scale: 2 },
                 jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
             };
-            
+
             html2pdf().from(element).set(options).outputPdf().then(function (pdfBlob) {
                 const reader = new FileReader();
                 reader.onloadend = function () {
-                    const base64data = reader.result;
-                    // Gửi base64data đến server hoặc lưu lại
-                    console.log(base64data); // Bạn có thể gửi nội dung này đến server qua fetch hoặc XMLHttpRequest
+                    const base64data = reader.result.split(',')[1]; // Chỉ lấy phần base64
+                    document.getElementById('base64-output').textContent = base64data;
                 };
                 reader.readAsDataURL(pdfBlob);
             });
